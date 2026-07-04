@@ -194,19 +194,47 @@
   .btn-ghost { border: 1px solid var(--border-strong); color: var(--text-dim); background: var(--bg-card); box-shadow: var(--shadow-sm); }
   .btn-ghost:hover { color: var(--text); border-color: var(--text-faint); }
 
-  /* ── pip preview strip ──────────────────────────── */
+  /* ── pip preview carousel ───────────────────────── */
   .surfaces-preview {
-    margin: 84px auto 0; max-width: 940px;
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+    margin: 84px auto 0; max-width: 520px;
+    text-align: center;
   }
-  @media (max-width: 800px) { .surfaces-preview { grid-template-columns: 1fr; max-width: 420px; } }
+  .preview-carousel {
+    position: relative;
+    min-height: 172px;
+  }
   .preview-card {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 0; overflow: hidden;
-    text-align: left; transition: transform 0.25s, box-shadow 0.25s;
+    text-align: left;
+    box-shadow: var(--shadow-sm);
+    position: absolute; top: 0; left: 0; right: 0;
+    opacity: 0; transform: translateY(14px) scale(0.98);
+    pointer-events: none; z-index: 0;
+    transition: opacity 0.45s ease, transform 0.45s ease, box-shadow 0.45s ease;
+  }
+  .preview-card.active {
+    opacity: 1; transform: none; pointer-events: auto; z-index: 1;
+    box-shadow: var(--shadow-md);
+  }
+  .preview-dots {
+    display: flex; justify-content: center; gap: 8px; margin-top: 18px;
+  }
+  .preview-dot {
+    border: 1px solid var(--border-strong); background: var(--bg-card);
+    color: var(--text-dim); border-radius: 100px;
+    padding: 6px 14px; font-size: 12.5px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
     box-shadow: var(--shadow-sm);
   }
-  .preview-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .preview-dot:hover { color: var(--text); border-color: var(--text-faint); }
+  .preview-dot.active {
+    color: var(--text); border-color: var(--coral);
+    background: var(--accent-soft);
+  }
+  .preview-dot[data-surface="slack"].active { border-color: var(--teal); background: rgba(12, 166, 120, 0.08); color: #087f5b; }
+  .preview-dot[data-surface="desktop"].active { border-color: var(--amber); background: rgba(245, 159, 0, 0.1); color: #b35a00; }
+  .preview-dot[data-surface="browser"].active { border-color: var(--violet); background: rgba(112, 72, 232, 0.08); color: #5f3dc4; }
   .preview-head {
     display: flex; align-items: center; gap: 8px;
     padding: 10px 14px; border-bottom: 1px solid var(--border);
@@ -420,6 +448,7 @@
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1; transform: none; transition: none; }
     .badge .dot { animation: none; }
+    .preview-card { transition: none; transform: none; }
   }
 </style>
 </head>
@@ -463,28 +492,35 @@
     <a class="btn btn-ghost" href="https://github.com/Sach1ng/tandem" target="_blank" rel="noopener">Star on GitHub</a>
   </div>
 
-  <!-- three-surface preview -->
+  <!-- three-surface preview carousel -->
   <div class="surfaces-preview">
-    <div class="preview-card reveal">
-      <div class="preview-head"><span class="traffic"><i></i><i></i><i></i></span><span class="preview-title">#product — Slack</span></div>
-      <div class="preview-body">
-        <div class="chat-line"><span class="avatar user">HT</span><span class="msg"><b>@Pip</b> ship the launch one-pager from this thread — use our template</span></div>
-        <div class="chat-line"><span class="avatar pip">P</span><span class="msg">Shipped — read 34 messages, <b>wrote docs/launch-one-pager.md</b>, posted the draft here, and logged 2 open questions for design.</span></div>
+    <div class="preview-carousel" id="preview-carousel">
+      <div class="preview-card active" data-surface="slack">
+        <div class="preview-head"><span class="traffic"><i></i><i></i><i></i></span><span class="preview-title">#product — Slack</span></div>
+        <div class="preview-body">
+          <div class="chat-line"><span class="avatar user">HT</span><span class="msg"><b>@Pip</b> ship the launch one-pager from this thread — use our template</span></div>
+          <div class="chat-line"><span class="avatar pip">P</span><span class="msg">Shipped — read 34 messages, <b>wrote docs/launch-one-pager.md</b>, posted the draft here, and logged 2 open questions for design.</span></div>
+        </div>
+      </div>
+      <div class="preview-card" data-surface="desktop">
+        <div class="preview-head"><span class="traffic"><i></i><i></i><i></i></span><span class="preview-title">Pip — desktop</span></div>
+        <div class="preview-body">
+          <div class="chat-line"><span class="avatar user">⌘</span><span class="msg"><span class="kbd">⌘⇧T</span> snip a failing chart → "debug this and file it"</span></div>
+          <div class="chat-line"><span class="avatar pip">P</span><span class="msg">Done — traced the drop to Tuesday's deploy, <b>wrote the incident timeline</b>, filed repro steps in tasks.md, and queued a rollback checklist.</span></div>
+        </div>
+      </div>
+      <div class="preview-card" data-surface="browser">
+        <div class="preview-head"><span class="traffic"><i></i><i></i><i></i></span><span class="preview-title">Pip — browser</span></div>
+        <div class="preview-body">
+          <div class="chat-line"><span class="avatar user">HT</span><span class="msg"><span class="kbd">Assign to Pip</span> on an RFP page → "turn this into tickets + a response outline"</span></div>
+          <div class="chat-line"><span class="avatar pip">P</span><span class="msg">Done — parsed the spec, <b>created 6 tasks in tasks.md</b> with owners, drafted the response outline, and saved vendor gaps to memory.</span></div>
+        </div>
       </div>
     </div>
-    <div class="preview-card reveal" style="transition-delay:.08s">
-      <div class="preview-head"><span class="traffic"><i></i><i></i><i></i></span><span class="preview-title">Pip — desktop</span></div>
-      <div class="preview-body">
-        <div class="chat-line"><span class="avatar user">⌘</span><span class="msg"><span class="kbd">⌘⇧T</span> snip a failing chart → "debug this and file it"</span></div>
-        <div class="chat-line"><span class="avatar pip">P</span><span class="msg">Done — traced the drop to Tuesday's deploy, <b>wrote the incident timeline</b>, filed repro steps in tasks.md, and queued a rollback checklist.</span></div>
-      </div>
-    </div>
-    <div class="preview-card reveal" style="transition-delay:.16s">
-      <div class="preview-head"><span class="traffic"><i></i><i></i><i></i></span><span class="preview-title">Pip — browser</span></div>
-      <div class="preview-body">
-        <div class="chat-line"><span class="avatar user">HT</span><span class="msg"><span class="kbd">Assign to Pip</span> on an RFP page → "turn this into tickets + a response outline"</span></div>
-        <div class="chat-line"><span class="avatar pip">P</span><span class="msg">Done — parsed the spec, <b>created 6 tasks in tasks.md</b> with owners, drafted the response outline, and saved vendor gaps to memory.</span></div>
-      </div>
+    <div class="preview-dots" id="preview-dots">
+      <button type="button" class="preview-dot active" data-surface="slack" aria-label="Slack example">Slack</button>
+      <button type="button" class="preview-dot" data-surface="desktop" aria-label="Desktop example">desktop</button>
+      <button type="button" class="preview-dot" data-surface="browser" aria-label="Chrome example">Chrome</button>
     </div>
   </div>
 </header>
@@ -747,23 +783,54 @@
   }
 
   (function rotateSurfaces() {
-    const words = ["Slack", "desktop", "Chrome"];
-    const el = document.getElementById("rotator");
+    const surfaces = [
+      { word: "Slack", key: "slack" },
+      { word: "desktop", key: "desktop" },
+      { word: "Chrome", key: "browser" },
+    ];
+    const rotator = document.getElementById("rotator");
+    const cards = [...document.querySelectorAll(".preview-card")];
+    const dots = [...document.querySelectorAll(".preview-dot")];
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let i = 0;
-    setInterval(() => {
-      i = (i + 1) % words.length;
-      if (reduced) { el.textContent = words[i]; return; }
-      el.classList.add("swap-out");
-      setTimeout(() => {
-        el.textContent = words[i];
-        el.classList.remove("swap-out");
-        el.classList.add("swap-in");
-        requestAnimationFrame(() =>
-          requestAnimationFrame(() => el.classList.remove("swap-in"))
-        );
-      }, 320);
-    }, 2200);
+    let timer;
+
+    function show(idx) {
+      i = idx;
+      const { word, key } = surfaces[i];
+      if (reduced) {
+        rotator.textContent = word;
+      } else {
+        rotator.classList.add("swap-out");
+        setTimeout(() => {
+          rotator.textContent = word;
+          rotator.classList.remove("swap-out");
+          rotator.classList.add("swap-in");
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => rotator.classList.remove("swap-in"))
+          );
+        }, 320);
+      }
+      cards.forEach((c) => c.classList.toggle("active", c.dataset.surface === key));
+      dots.forEach((d) => d.classList.toggle("active", d.dataset.surface === key));
+    }
+
+    function next() { show((i + 1) % surfaces.length); }
+
+    function start() {
+      clearInterval(timer);
+      timer = setInterval(next, 3200);
+    }
+
+    dots.forEach((dot, idx) => {
+      dot.addEventListener("click", () => {
+        show(idx);
+        start();
+      });
+    });
+
+    show(0);
+    start();
   })();
 
   const io = new IntersectionObserver(
