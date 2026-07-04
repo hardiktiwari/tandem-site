@@ -4,9 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light" />
-<title>Tandem — One AI coworker. Every surface. Any model.</title>
+<title>Tandem — One AI coworker. On every surface where you do the work.</title>
 <meta name="description" content="Tandem is Pip: an ambient AI coworker that lives in Slack, on your desktop, and in your browser. Local-first, model-agnostic, powered by the Cursor CLI. Open source." />
-<meta property="og:title" content="Tandem — One AI coworker. Every surface. Any model." />
+<meta property="og:title" content="Tandem — One AI coworker. On every surface where you do the work." />
 <meta property="og:description" content="Meet Pip: an ambient AI coworker in Slack, on your screen, and in your browser. Your models, your machine, your context — it compounds as you work." />
 <meta property="og:type" content="website" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -143,6 +143,19 @@
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent; color: transparent;
   }
+  /* rotating surface word */
+  .rotator-slot { display: inline-block; }
+  .rotator {
+    display: inline-block;
+    transition: opacity 0.32s ease, transform 0.32s ease;
+  }
+  .rotator.swap-out { opacity: 0; transform: translateY(-0.45em); }
+  .rotator.swap-in { opacity: 0; transform: translateY(0.45em); transition: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .rotator { transition: none; }
+    .rotator.swap-out, .rotator.swap-in { opacity: 1; transform: none; }
+  }
+
   .hero-sub {
     font-size: clamp(17px, 2.2vw, 20px); color: var(--text-dim);
     max-width: 640px; margin: 0 auto 40px;
@@ -432,7 +445,7 @@
 <!-- ── HERO ─────────────────────────────────────────── -->
 <header class="hero wrap" id="top">
   <div class="badge"><span class="dot"></span> Open source · MIT · Local-first</div>
-  <h1>One AI coworker.<br /><span class="grad">Every surface. Any model.</span></h1>
+  <h1>One AI coworker.<br />On every surface where you<br />do the work — <span class="rotator-slot"><span id="rotator" class="grad rotator">Slack</span></span></h1>
   <p class="hero-sub">
     Meet <strong>Pip</strong> — an ambient AI coworker that lives in <strong>Slack</strong>, on your
     <strong>desktop</strong>, and in your <strong>browser</strong>. Same memory everywhere. Runs on your
@@ -732,6 +745,26 @@
       setTimeout(() => (btn.textContent = "Copy"), 1600);
     });
   }
+
+  (function rotateSurfaces() {
+    const words = ["Slack", "desktop", "Chrome"];
+    const el = document.getElementById("rotator");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % words.length;
+      if (reduced) { el.textContent = words[i]; return; }
+      el.classList.add("swap-out");
+      setTimeout(() => {
+        el.textContent = words[i];
+        el.classList.remove("swap-out");
+        el.classList.add("swap-in");
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => el.classList.remove("swap-in"))
+        );
+      }, 320);
+    }, 2200);
+  })();
 
   const io = new IntersectionObserver(
     (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("in")),
