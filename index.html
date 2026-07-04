@@ -407,18 +407,6 @@
   .quickstart-note { margin-top: 22px; color: var(--text-dim); font-size: 14.5px; max-width: 640px; }
   .quickstart-note code { background: var(--bg-soft); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 12.5px; }
 
-  /* security strip */
-  .security-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 48px; }
-  @media (max-width: 720px) { .security-grid { grid-template-columns: 1fr; } }
-  .sec-card {
-    background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 24px; font-size: 14px; color: var(--text-dim);
-    box-shadow: var(--shadow-sm);
-  }
-  .sec-card h4 { color: var(--text); font-size: 15px; font-weight: 650; margin-bottom: 7px; display: flex; align-items: center; gap: 9px; }
-  .sec-card .sec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 6px rgba(12, 166, 120, 0.55); }
-  .sec-card code { background: var(--bg-soft); border: 1px solid var(--border); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
-
   /* final cta */
   .final-cta {
     text-align: center; padding: 110px 0 120px; position: relative;
@@ -704,39 +692,6 @@
       <code>tandem pip</code> self-initializes on first run. Slack and Chrome setup live in each
       app's README. No PM OS required: Pip starts blank and builds your context as you go.
     </p>
-  </div>
-</section>
-
-<!-- ── SECURITY ─────────────────────────────────────── -->
-<section id="security">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="section-kicker">Security</div>
-      <h2>Powerful by design.<br />Locked down by default.</h2>
-      <p class="section-sub">Pip gets real work done because it can act on your machine — so every path in is gated.</p>
-    </div>
-    <div class="security-grid">
-      <div class="sec-card reveal">
-        <h4><span class="sec-dot"></span>Slack allow-lists</h4>
-        Only users on <code>ALLOWED_USERS</code> can run commands. Owners can grant per-thread,
-        time-limited access with a single message.
-      </div>
-      <div class="sec-card reveal" style="transition-delay:.06s">
-        <h4><span class="sec-dot"></span>Loopback-only bridge</h4>
-        The browser bridge binds to <code>127.0.0.1</code>, enforces loopback <code>Host</code>
-        (anti DNS-rebind), and rejects any request not from the extension's unforgeable origin.
-      </div>
-      <div class="sec-card reveal" style="transition-delay:.12s">
-        <h4><span class="sec-dot"></span>Read-only by default</h4>
-        Browser <code>/ask</code> runs in read-only mode. Only the explicit <em>Assign to Pip</em>
-        action gets full tool access — and request bodies are size-capped.
-      </div>
-      <div class="sec-card reveal" style="transition-delay:.18s">
-        <h4><span class="sec-dot"></span>Nothing leaves your machine</h4>
-        Local-first: your memory, sessions, and tokens stay on disk and are gitignored. No hosted
-        brain, no vendor cloud in the loop.
-      </div>
-    </div>
   </div>
 </section>
 
