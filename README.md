@@ -1,18 +1,23 @@
 # Tandem launch website
 
-Static, single-file launch site for Tandem. No build step, no dependencies.
+Static site for Tandem — no build step, no dependencies. Deployed to **GitHub Pages**.
+
+**Live:** https://hardiktiwari.github.io/tandem-site/  
+**Roadmap demo:** https://hardiktiwari.github.io/tandem-site/roadmap.html
 
 ## Preview locally
 
 ```bash
-npx serve apps/website
+npm run roadmap:open
 # or
 python3 -m http.server 8080 --directory apps/website
+# → http://127.0.0.1:8080/roadmap.html
 ```
 
 ## Deploy
 
-It's one `index.html` — host it anywhere:
+Edit files here, then publish to **`hardiktiwari/tandem-site`** (push to `main` on that repo).
 
-- **GitHub Pages:** point Pages at this folder (or copy `index.html` to a `gh-pages` branch).
-- **Vercel / Netlify:** set the project root to `apps/website`, no build command needed.
+Do **not** use `Sach1ng/tandem` GitHub Pages (`sach1ng.github.io/tandem`) as the live deploy target.
+
+Put all shareable HTML here (`index.html`, `roadmap.html`, etc.) — not the repo root.
